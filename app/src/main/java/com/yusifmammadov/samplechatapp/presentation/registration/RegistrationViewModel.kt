@@ -1,4 +1,4 @@
-package com.yusifmammadov.samplechatapp.presentation.login
+package com.yusifmammadov.samplechatapp.presentation.registration
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,19 +18,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repository: ChatRepository):
+class RegistrationViewModel @Inject constructor(private val repository: ChatRepository):
     ViewModel() {
 
-    var state by mutableStateOf(LoginScreenState())
+    var state by mutableStateOf(RegistrationScreenState())
 
     private val _eventChannel = Channel<Event>()
     val eventChannel = _eventChannel.receiveAsFlow()
 
-    fun signIn(){
+    fun signUp(){
         if (state.emailValue.isNotEmpty() && state.passwordValue.isNotEmpty()) {
             viewModelScope.launch {
-                repository.signIn(state.emailValue, state.passwordValue)
+                repository.signUpUser(state.userNameValue, state.emailValue, state.passwordValue)
                     .collect { resource ->
                         when(resource) {
                             is Resource.Success -> {
@@ -52,16 +53,20 @@ class LoginViewModel @Inject constructor(private val repository: ChatRepository)
         } else { viewModelScope.launch {
             withContext(Dispatchers.Main.immediate) {
                 _eventChannel.send(Event.ShowToast(R.string.empty_field_error))
+                }
             }
-        }
         }
     }
 
     fun onEmailValueChanged(s: String) {
-        state = state.copy(emailValue = s)
-    }
+            state = state.copy(emailValue = s)
+        }
 
     fun onPasswordValueChanged(s: String) {
         state = state.copy(passwordValue = s)
+    }
+
+    fun onUsernameValueChanged(s: String) {
+        state = state.copy(userNameValue = s)
     }
 }

@@ -4,4 +4,15 @@
     <string name="sign_up">Sign up</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
+    <string name="registration_error_message">Could not sign up</string>
+    <string name="registered_successfully">Signed up successfully</string>
+    <string name="empty_field_error">All fields should be filled</string>
+    <string name="login_error">Could not sign in</string>
+    <string name="login_success">Signed in successfully</string>
+    <string name="chats">Chats</string>
+    <string name="sign_out">Sign out</string>
+    <string name="log_out_error">Could not sign out</string>
+    <string name="log_out_success">Signed out</string>
+    <string name="username">Username</string>
+    <string name="load_users_error">Could not load users</string>
 </resources>
