@@ -1,5 +1,6 @@
 package com.yusifmammadov.samplechatapp.presentation.home
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +14,8 @@ import androidx.compose.ui.res.stringResource
 import com.yusifmammadov.samplechatapp.R
 
 @Composable
-fun HomeAppBar(
+fun ChatAppBar(
+    title: String,
     onSignOut: () -> Unit
 ) {
 
@@ -28,7 +30,7 @@ fun HomeAppBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.chats)
+                    text = title
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),

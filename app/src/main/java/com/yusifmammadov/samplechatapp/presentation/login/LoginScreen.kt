@@ -75,6 +75,7 @@ fun LoginScreen(
             label = {
                 Text(text = stringResource(id = R.string.email))
             },
+            maxLines = 1,
             modifier = modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 32.dp))
@@ -87,6 +88,7 @@ fun LoginScreen(
             label = {
                 Text(text = stringResource(id = R.string.password))
             },
+            maxLines = 1,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = modifier

@@ -27,6 +27,7 @@ class LoginViewModel @Inject constructor(private val repository: ChatRepository)
     private val _eventChannel = Channel<Event>()
     val eventChannel = _eventChannel.receiveAsFlow()
 
+    // TODO verify email address
     fun signIn(){
         if (state.emailValue.isNotEmpty() && state.passwordValue.isNotEmpty()) {
             viewModelScope.launch {
@@ -43,7 +44,7 @@ class LoginViewModel @Inject constructor(private val repository: ChatRepository)
                             is Resource.Error -> {
                                 withContext(Dispatchers.Main.immediate) {
                                     state = state.copy(isLoading = false)
-                                    _eventChannel.send(Event.ShowToast(R.string.registration_error_message))
+                                    _eventChannel.send(Event.ShowToast(R.string.login_error))
                                 }
                             }
                         }

@@ -2,13 +2,12 @@ package com.yusifmammadov.samplechatapp.presentation.home
 
 import android.widget.Toast
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yusifmammadov.samplechatapp.R
 import com.yusifmammadov.samplechatapp.navigation.Screen
@@ -32,7 +31,7 @@ fun HomeScreen(
     
     Scaffold(
         topBar = {
-            HomeAppBar {
+            ChatAppBar(stringResource(id = R.string.chats)) {
                 viewModel.signOut()
             }
         },

@@ -38,7 +38,9 @@ class HomeViewModel @Inject constructor(
                     }
                     is Resource.Error -> {
                         state = state.copy(isLoading = false)
-                        _eventChannel.send(Event.ShowToast(R.string.load_users_error))
+                        withContext(Dispatchers.Main.immediate) {
+                            _eventChannel.send(Event.ShowToast(R.string.load_users_error))
+                        }
                     }
                     is Resource.Loading -> {
                         state = state.copy(isLoading = true)

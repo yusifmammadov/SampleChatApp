@@ -55,7 +55,16 @@ fun ChatNavHost(
         }
 
         composable(Screen.Chat.route + "/{userId}") { backStackEntry ->
-            ChatScreen(userId = backStackEntry.arguments?.getString("userId")!!)
+            ChatScreen(
+                userId = backStackEntry.arguments?.getString("userId")!!,
+                navigateToRoute = { route ->
+                    if (route == Screen.Login.route) {
+                        navController.popBackStack()
+                        navController.popBackStack()
+                    }
+                    navController.navigate(route)
+                }
+            )
         }
     }
 }

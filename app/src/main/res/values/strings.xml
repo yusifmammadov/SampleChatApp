@@ -15,4 +15,5 @@
     <string name="log_out_success">Signed out</string>
     <string name="username">Username</string>
     <string name="load_users_error">Could not load users</string>
+    <string name="load_messages_error">Could not load messages</string>
 </resources>

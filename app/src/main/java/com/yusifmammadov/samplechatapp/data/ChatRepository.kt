@@ -1,11 +1,17 @@
 package com.yusifmammadov.samplechatapp.data
 
 import android.util.Log
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import com.yusifmammadov.samplechatapp.data.model.Message
+import com.yusifmammadov.samplechatapp.data.model.MessageUi
 import com.yusifmammadov.samplechatapp.data.model.User
+import com.yusifmammadov.samplechatapp.util.Constants
 import com.yusifmammadov.samplechatapp.util.Constants.USERS_PATH
 import com.yusifmammadov.samplechatapp.util.Resource
 import kotlinx.coroutines.channels.awaitClose
@@ -95,6 +101,81 @@ class ChatRepository @Inject constructor(
             dbRef.removeEventListener(listener)
         }
 
+    }
+
+    suspend fun getMessages(receiverId: String) = callbackFlow<Resource<List<MessageUi>>> {
+
+        trySend(Resource.Loading())
+
+        val currentUserRoom = receiverId + auth.currentUser?.uid!!
+
+        val listener = dbRef.child(Constants.CHATS_PATH)
+            .child(currentUserRoom)
+            .child(Constants.MESSAGES_PATH).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val listMessages = mutableListOf<MessageUi>()
+
+                    snapshot.children.forEach { messageSnapShot ->
+
+                        val message = messageSnapShot.getValue(Message::class.java)
+                        Log.d(TAG, "onDataChange: senderId: ${message?.senderId}, userId: ${auth.currentUser?.uid}")
+                        val isMine = message?.senderId!! == auth.currentUser?.uid!!
+                        Log.d(TAG, "onDataChange: $isMine")
+                        listMessages.add(MessageUi(
+                            message.message,
+                            isMine
+                        ))
+                    }
+
+                    trySend(Resource.Success(listMessages))
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    trySend(Resource.Error("Could not load messages"))
+                }
+            })
+
+        awaitClose {
+            dbRef.removeEventListener(listener)
+        }
+    }
+
+    fun sendMessage(receiverId: String, message: String) {
+
+        val currentUserRoom = receiverId + auth.currentUser?.uid!!
+        val receiverRoom = auth.currentUser?.uid!! + receiverId
+
+        dbRef.child("chats")
+            .child(currentUserRoom)
+            .child("messages")
+            .push()
+            .setValue(
+                Message(
+                    message,
+                    auth.currentUser?.uid!!
+                )
+            )
+            .addOnSuccessListener {
+                dbRef.child("chats")
+                    .child(receiverRoom)
+                    .child("messages")
+                    .push()
+                    .setValue(
+                        Message(
+                            message,
+                            auth.currentUser?.uid!!
+                        )
+                    )
+            }
+    }
+
+    suspend fun getUsernameForId(userId: String) = flow<String> {
+        val snapshot = dbRef.child(Constants.USERS_PATH).child(userId).get().await()
+        val username = snapshot.getValue(User::class.java)?.userName
+
+        if (username != null) {
+            emit(username)
+        }
     }
 
 }

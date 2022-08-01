@@ -28,6 +28,7 @@ class RegistrationViewModel @Inject constructor(private val repository: ChatRepo
     private val _eventChannel = Channel<Event>()
     val eventChannel = _eventChannel.receiveAsFlow()
 
+    // TODO verify email address
     fun signUp(){
         if (state.emailValue.isNotEmpty() && state.passwordValue.isNotEmpty()) {
             viewModelScope.launch {
