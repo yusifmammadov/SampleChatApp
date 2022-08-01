@@ -8,3 +8,7 @@ Sample chat app built with Jetpack Compose.
 - UI state management
 - Integration with AAC: Navigation, Viewmodel
 - Kotlin flows
+
+
+TODO:
+- Add FCM push notifications
